@@ -106,6 +106,21 @@ CV07 - CV08 - CV09 - CV10 - CV11 - CV12 - CV17 - CV18 - CV19 - CV20 - CV21 - CV2
 # Obtaining statistc information about the fasta files
 seqkit stats CV39-NGS488_S35_L001_unmapped_R2.fasta (example)
 
+# Organizing files for Trinity
+Trinity code has some specifics for the files, specially multiple files 
+![image](https://github.com/user-attachments/assets/6b170023-2128-46bf-8ccf-0654f870b663) 
+
+So I needed to put all the files in a table, and after, convert the table in a tab-delimited text file. I did this step for both of the datasets (interaction sequencing files and germinates spores sequencing files). 
+For example: cond_A	cond_A_rep1	/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_fasta/CV1-NGS488_S1_L001_cut_PE1.fasta	/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_fasta/CV1-NGS488_S1_L001_cut_PE2.fasta
+![image](https://github.com/user-attachments/assets/96fa3066-4506-41b8-bcd1-676479c23a6c) (line 1 in the table)
+
+# Trinity Assembly
+After organizing the files in the correct template for trinity, it is time for use it.
+
+Trinity --seqType fa --max_memory 15G --samples_file trinitydata_interaction.txt --CPU 30
+
+Trinity --seqType fq --max_memory 15G --samples_file trinitydata_germinated.txt --CPU 30
+
 
 
 
