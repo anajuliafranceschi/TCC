@@ -122,6 +122,9 @@ Trinity --seqType fa --max_memory 15G --samples_file trinitydata_interaction.txt
 Trinity --seqType fq --max_memory 15G --samples_file trinitydata_germinated.txt --CPU 30
 
 
+CONDA - eval "$(/media/ext5tb/anajulia/miniconda3/bin/conda shell.bash hook)"
+
+
 
 
 
