@@ -124,6 +124,9 @@ Trinity --seqType fq --max_memory 15G --samples_file trinitydata_germinated.txt 
 
 CONDA - eval "$(/media/ext5tb/anajulia/miniconda3/bin/conda shell.bash hook)"
 
+sudo: gustavoc
+senha: genomics10,
+
 
 
 
