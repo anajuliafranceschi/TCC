@@ -127,6 +127,7 @@ CONDA - eval "$(/media/ext5tb/anajulia/miniconda3/bin/conda shell.bash hook)"
 sudo: gustavoc
 senha: genomics10,
 
+docker run -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity --seqType fa --samples_file /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_fasta/trinitydata_interaction.txt --max_memory 15G --CPU 25
 
 
 
