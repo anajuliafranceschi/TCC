@@ -117,9 +117,14 @@ For example: cond_A	cond_A_rep1	/media/ext5tb/anajulia/montagem2/fungi_reads/fun
 # Trinity Assembly
 After organizing the files in the correct template for trinity, it is time for use it.
 
-Trinity --seqType fa --max_memory 15G --samples_file trinitydata_interaction.txt --CPU 30
+The assembly was conducted in some attempts, in order to test and verify some files
+The first attempt used the wrong files, located in: /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_fasta (Estes arquivos não foram submetidos ao mapeamento pelo hisat)
+THe code used was: docker run -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity \
+--seqType fa --samples_file /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_fasta/trinitydata_interaction_renamed.txt \
+--max_memory 150G --CPU 30 --output /media/ext5tb/anajulia/montagem2/trinity_output_renamed > trinity_renamed_run.log (run_trinity_renamed.sh)
 
-Trinity --seqType fq --max_memory 15G --samples_file trinitydata_germinated.txt --CPU 30
+The second attempt used the fastq files found in: /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq (Arquivos submetidos ao mapeamento para retirada de reads da videira)
+The code used was: 
 
 
 CONDA - eval "$(/media/ext5tb/anajulia/miniconda3/bin/conda shell.bash hook)"
@@ -127,7 +132,7 @@ CONDA - eval "$(/media/ext5tb/anajulia/miniconda3/bin/conda shell.bash hook)"
 sudo: gustavoc
 senha: genomics10,
 
-docker run -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity --seqType fa --samples_file /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_fasta/trinitydata_interaction.txt --max_memory 15G --CPU 25
+
 
 
 
