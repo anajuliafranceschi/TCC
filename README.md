@@ -106,44 +106,17 @@ CV07 - CV08 - CV09 - CV10 - CV11 - CV12 - CV17 - CV18 - CV19 - CV20 - CV21 - CV2
 # Obtaining statistc information about the fasta files
 seqkit stats CV39-NGS488_S35_L001_unmapped_R2.fasta (example)
 
-# Checking sequencing bias using Salmon
-        #!/bin/bash
-        
-         # Caminho para o arquivo de referência
-        ref=/media/ext5tb/anajulia/montagem2/assembly/interaction_1/trinity_output_renamed.Trinity.fasta
-        
-         # Caminho para o índice do Salmon
-        index=/media/ext5tb/anajulia/montagem2/salmon_index_interaction_1
-        
-        # Criando o índice do Salmon
-        /media/SSD1TB/pedro/salmon-latest_linux_x86_64/bin/salmon index -t "$ref" -p 20 -i "$index"
-        
-        # Quantificação contra a referência
-        for i in /media/ext5tb/anajulia/montagem2/raw_reads_data/*_R1_001.fastq.gz
-        do
-        # Identificando o par de leitura
-            file2=$(echo "$i" | sed "s/_R1_001/_R2_001/g")
-        
-         # Extraindo o identificador do replicado
-            rep=$(basename "$i" | sed -E "s/(.*)-NGS[0-9]+.*/\1/g")
-        
-            echo "Analisando $i e $file2 para o replicado $rep"
-        
-         # Executando o Salmon para quantificação
-            /media/SSD1TB/pedro/salmon-latest_linux_x86_64/bin/salmon quant \
-                -i "$index" \
-                -l A \
-                -1 "$i" \
-                -2 "$file2" \
-                --validateMappings \
-                --threads 10 \
-                --seqBias \
-                --gcBias \
-                --minAssignedFrags 1 \
-                --output /media/ext5tb/anajulia/montagem2/quant_results/"$rep"
-        done
+# Checking sequencing bias using Infer Experiment (Galaxy)
+Was used the bam file obtained from the aligment between sequencing reads and Vitis Vinifera genome (fasta file and gff file). The gff file was converted into bed file. Both of them were put in the Galaxy tool (Infer Experiment).
 
-Results: *Automatically detected most likely library type as IU* 
+Results: This is PairEnd Data
+Fraction of reads failed to determine: 0.0137
+Fraction of reads explained by "1++,1--,2+-,2-+": 0.0048
+Fraction of reads explained by "1+-,1-+,2++,2--": 0.9815
+
+The library is Reverse Forward 
+![image](https://github.com/user-attachments/assets/a5c69b00-ba19-4fc0-afe8-5bcdc06eec68)
+![image](https://github.com/user-attachments/assets/93f48502-a6ff-45e5-94c1-83329950b2ca)    
 
 # Organizing files for Trinity
 Trinity code has some specifics for the files, specially multiple files 
