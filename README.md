@@ -106,6 +106,45 @@ CV07 - CV08 - CV09 - CV10 - CV11 - CV12 - CV17 - CV18 - CV19 - CV20 - CV21 - CV2
 # Obtaining statistc information about the fasta files
 seqkit stats CV39-NGS488_S35_L001_unmapped_R2.fasta (example)
 
+# Checking sequencing bias using Salmon
+#!/bin/bash
+
+# Caminho para o arquivo de referência
+ref=/media/ext5tb/anajulia/montagem2/assembly/interaction_1/trinity_output_renamed.Trinity.fasta
+
+# Caminho para o índice do Salmon
+index=/media/ext5tb/anajulia/montagem2/salmon_index_interaction_1
+
+# Criando o índice do Salmon
+/media/SSD1TB/pedro/salmon-latest_linux_x86_64/bin/salmon index -t "$ref" -p 20 -i "$index"
+
+# Quantificação contra a referência
+for i in /media/ext5tb/anajulia/montagem2/raw_reads_data/*_R1_001.fastq.gz
+do
+    # Identificando o par de leitura
+    file2=$(echo "$i" | sed "s/_R1_001/_R2_001/g")
+
+    # Extraindo o identificador do replicado
+    rep=$(basename "$i" | sed -E "s/(.*)-NGS[0-9]+.*/\1/g")
+
+    echo "Analisando $i e $file2 para o replicado $rep"
+
+    # Executando o Salmon para quantificação
+    /media/SSD1TB/pedro/salmon-latest_linux_x86_64/bin/salmon quant \
+        -i "$index" \
+        -l A \
+        -1 "$i" \
+        -2 "$file2" \
+        --validateMappings \
+        --threads 10 \
+        --seqBias \
+        --gcBias \
+        --minAssignedFrags 1 \
+        --output /media/ext5tb/anajulia/montagem2/quant_results/"$rep"
+done
+
+Results: *Automatically detected most likely library type as IU* 
+
 # Organizing files for Trinity
 Trinity code has some specifics for the files, specially multiple files 
 ![image](https://github.com/user-attachments/assets/6b170023-2128-46bf-8ccf-0654f870b663) 
