@@ -136,7 +136,9 @@ THe code used was: docker run -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trini
 --max_memory 150G --CPU 30 --output /media/ext5tb/anajulia/montagem2/trinity_output_renamed > trinity_renamed_run.log (run_trinity_renamed.sh)
 
 The second attempt used the fastq files found in: /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq (Arquivos submetidos ao mapeamento para retirada de reads da videira)
-The code used was: 
+The code used was: docker run -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity \
+--seqType fq --samples_file /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinitydata_interaction_2.txt \
+--max_memory 150G --CPU 30 --SS_lib_type RF --output /media/ext5tb/anajulia/montagem2/trinity_output_attempt4 > trinity_attempt4_run.log
 
 
 CONDA - eval "$(/media/ext5tb/anajulia/miniconda3/bin/conda shell.bash hook)"
