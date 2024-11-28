@@ -136,9 +136,9 @@ THe code used was: docker run -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trini
 --max_memory 150G --CPU 30 --output /media/ext5tb/anajulia/montagem2/trinity_output_renamed > trinity_renamed_run.log (run_trinity_renamed.sh)
 
 The second attempt used the fastq files found in: /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq (Arquivos submetidos ao mapeamento para retirada de reads da videira)
-The code used was: docker run -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity \
+The code used was: docker run --user $(id -u):$(id -g) -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity \
 --seqType fq --samples_file /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinitydata_interaction_2.txt \
---max_memory 150G --CPU 30 --SS_lib_type RF --output /media/ext5tb/anajulia/montagem2/trinity_output_attempt4 > trinity_attempt4_run.log
+--max_memory 150G --CPU 40 --SS_lib_type RF --output /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinity_output_attempt5 > trinity_attempt5_run.log
 
 
 CONDA - eval "$(/media/ext5tb/anajulia/miniconda3/bin/conda shell.bash hook)"
@@ -146,7 +146,43 @@ CONDA - eval "$(/media/ext5tb/anajulia/miniconda3/bin/conda shell.bash hook)"
 sudo: gustavoc
 senha: genomics10,
 
+# TrinityStats
+################################
+        ## Counts of transcripts, etc.
+################################
+Total trinity 'genes':	74185
+Total trinity transcripts:	105628
+Percent GC: 44.67
 
+########################################
+Stats based on ALL transcript contigs:
+########################################
+
+	Contig N10: 3196
+	Contig N20: 2396
+	Contig N30: 1920
+	Contig N40: 1545
+	Contig N50: 1215
+
+	Median contig length: 400
+	Average contig: 723.03
+	Total assembled bases: 76372710
+
+# BUSCO Analysis
+        # BUSCO version is: 5.8.0 
+        # The lineage dataset is: basidiomycota_odb10 (Creation date: 2020-09-10, number of genomes: 133, number of BUSCOs: 1764)
+        # Summarized benchmarking in BUSCO notation for file /mnt/pulsar/files/staging/10326218/inputs/dataset_15dc61c8-4ee9-422d-9f9d-342227968d2e.dat
+        # BUSCO was run in mode: euk_tran
+
+	***** Results: *****
+
+	C:85.0%[S:4.5%,D:80.4%],F:6.9%,M:8.2%,n:1764	   
+	1499	Complete BUSCOs (C)			   
+	80	Complete and single-copy BUSCOs (S)	   
+	1419	Complete and duplicated BUSCOs (D)	   
+	121	Fragmented BUSCOs (F)			   
+	144	Missing BUSCOs (M)			   
+	1764	Total BUSCO groups searched
 
 
 
