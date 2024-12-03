@@ -187,9 +187,46 @@ Stats based on ALL transcript contigs:
  # Finding ORFs in transcripts
  The script biopython_orf_find.py was used, and it found 246618 orfs in the assembly file (output: orfs_montageminteracao.fasta)
  The script get_longestORF.py was used to select the longest orf in the orfs file, and it found 99361 orfs (output: longestorfs_montageminteracao.fasta)
+ 6267 transcripts without ORFs
 
  # Using the CDHits to colapse the assembly
+cd-hit -i trinity_output_attempt5.Trinity.fasta -o montageminteracao_colapsed.fasta -T 20 -M 0 -c 0.9 -d 0
 
+################################
+	## Counts of transcripts, etc.
+################################
+Total trinity 'genes':	72600
+Total trinity transcripts:	83533
+Percent GC: 44.55
+
+########################################
+Stats based on ALL transcript contigs:
+########################################
+
+	Contig N10: 2794
+	Contig N20: 2044
+	Contig N30: 1591
+	Contig N40: 1215
+	Contig N50: 890
+
+	Median contig length: 353
+	Average contig: 605.20
+	Total assembled bases: 50554586
+
+	 # BUSCO version is: 5.8.0 
+	# The lineage dataset is: basidiomycota_odb10 (Creation date: 2020-09-10, number of genomes: 133, number of BUSCOs: 1764)
+	# Summarized benchmarking in BUSCO notation for file /mnt/pulsar/files/staging/10361100/inputs/dataset_796b3a49-62e3-4763-b764-50ffe9ffb893.dat
+	# BUSCO was run in mode: euk_tran
+
+	***** Results: *****
+
+	C:84.8%[S:35.3%,D:49.5%],F:6.9%,M:8.4%,n:1764	   
+	1495	Complete BUSCOs (C)			   
+	622	Complete and single-copy BUSCOs (S)	   
+	873	Complete and duplicated BUSCOs (D)	   
+	121	Fragmented BUSCOs (F)			   
+	148	Missing BUSCOs (M)			   
+	1764	Total BUSCO groups searched
 
 
 
