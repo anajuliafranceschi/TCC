@@ -184,6 +184,12 @@ Stats based on ALL transcript contigs:
 	144	Missing BUSCOs (M)			   
 	1764	Total BUSCO groups searched
 
+ # Finding ORFs in transcripts
+ The script biopython_orf_find.py was used, and it found 246618 orfs in the assembly file (output: orfs_montageminteracao.fasta)
+ The script get_longestORF.py was used to select the longest orf in the orfs file, and it found 99361 orfs (output: longestorfs_montageminteracao.fasta)
+
+ # Using the CDHits to colapse the assembly
+
 
 
 
