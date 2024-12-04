@@ -1,5 +1,51 @@
 # TCC 🍇 💻 🧬
 
+# fastqc
+ automatic script (run_fastqc.sh)
+	 #!/bin/bash
+	mkdir -p ./FastQC_raw
+	for i in *fastq.gz
+	do
+	fastqc "$i" -o ./FastQC_raw -t 8
+	done
+
+# multiqc
+	 multiqc /media/ext5tb/anajulia/montagem2/raw_reads_data/FastQC_raw
+
+# cutadapt
+First we needed to find the adapters used is the sequencing. This was the kit used TruSeq® Stranded mRNA Library Prep kit e o sequenciador NovaSeq 6000. So we entered the Illumina site and found the sequences used as adapters.
+https://support.illumina.com/downloads/illumina-adapter-sequences-document-1000000002694.html
+https://support-docs.illumina.com/SHARE/AdapterSequences/Content/SHARE/AdapterSeq/TruSeq/CDIndexes.htm -> ILLUMINA SITE
+TruSeq DNA and RNA CD Indexes -> SEQUENCING TYPE
+
+The following sequences are used for adapter trimming.
+
+Read 1
+
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Read 2
+
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+The script below was used (cutadapt.sh)
+	
+ 	#!/bin/bash
+	
+	for i in /media/ext5tb/anajulia/montagem2/raw_reads_data/*_R1_001.fastq.gz
+	do
+	    file2=$(echo "$i" | sed "s/_R1/_R2/g")
+	    output1=$(basename "$i" | sed "s/_R1_001.fastq.gz//g")
+	
+	    cutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
+	    -m 50 --max-n 2 -q 20 -j 6 \
+	    -o "${output1}_cut_PE1.fastq.gz" \
+	    -p "${output1}_cut_PE2.fastq.gz" \
+	    "$i" "$file2" > "${output1}_cutadapt_summary.txt"
+	
+	done
+
+
 # Removing control sequences from the main archive
 CV07 - CV08 - CV09 - CV10 - CV11 - CV12 - CV17 - CV18 - CV19 - CV20 - CV21 - CV22 - CV29 - CV30 - CV31 - CV32 - CV46 - CV33 - CV40 - CV41 - CV42 - CV43 - CV44 - CV45
 
