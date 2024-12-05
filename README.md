@@ -172,7 +172,7 @@ So I needed to put all the files in a table, and after, convert the table in a t
 For example: cond_A	cond_A_rep1	/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_fasta/CV1-NGS488_S1_L001_cut_PE1.fasta	/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_fasta/CV1-NGS488_S1_L001_cut_PE2.fasta
 ![image](https://github.com/user-attachments/assets/96fa3066-4506-41b8-bcd1-676479c23a6c) (line 1 in the table)
 
-# Trinity Assembly
+# Trinity Assembly - Plant-pathogen interaction
 After organizing the files in the correct template for trinity, it is time for use it.
 
 The assembly was conducted in some attempts, in order to test and verify some files
@@ -274,8 +274,10 @@ Stats based on ALL transcript contigs:
 	148	Missing BUSCOs (M)			   
 	1764	Total BUSCO groups searched
 
-
-
+# Trinity Assembly - Germinated Spores
+docker run --user $(id -u):$(id -g) -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity \
+--seqType fq --left EG1_NGS396_S8_L001_R1_001.fastq.gz_cut_R1.fastq,EG2_NGS396_S8_L001_R1_001.fastq.gz_cut_R1.fastq,EG3_NGS396_S8_L001_R1_001.fastq.gz_cut_R1.fastq --right EG1_NGS396_S8_L001_R1_001.fastq.gz_cut_R2.fastq,EG2_NGS396_S8_L001_R1_001.fastq.gz_cut_R2.fastq,EG3_NGS396_S8_L001_R1_001.fastq.gz_cut_R2.fastq \
+--max_memory 150G --CPU 40 --SS_lib_type RF --output /media/ext5tb/anajulia/montagem2/fungo_germinado/trinity_montagem_germinado > trinity_germinado_run.log
 
 
 
