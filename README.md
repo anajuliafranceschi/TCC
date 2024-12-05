@@ -275,9 +275,13 @@ Stats based on ALL transcript contigs:
 	1764	Total BUSCO groups searched
 
 # Trinity Assembly - Germinated Spores
-docker run --user $(id -u):$(id -g) -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity \
---seqType fq --left EG1_NGS396_S8_L001_R1_001.fastq.gz_cut_R1.fastq,EG2_NGS396_S8_L001_R1_001.fastq.gz_cut_R1.fastq,EG3_NGS396_S8_L001_R1_001.fastq.gz_cut_R1.fastq --right EG1_NGS396_S8_L001_R1_001.fastq.gz_cut_R2.fastq,EG2_NGS396_S8_L001_R1_001.fastq.gz_cut_R2.fastq,EG3_NGS396_S8_L001_R1_001.fastq.gz_cut_R2.fastq \
---max_memory 150G --CPU 40 --SS_lib_type RF --output /media/ext5tb/anajulia/montagem2/fungo_germinado/trinity_montagem_germinado > trinity_germinado_run.log
+docker run --user $(id -u):$(id -g) -v /media/ext5tb/anajulia/montagem2/fungo_germinado:/media/ext5tb/anajulia/montagem2/fungo_germinado trinityrnaseq/trinityrnaseq Trinity \
+--seqType fq \
+--left /media/ext5tb/anajulia/montagem2/fungo_germinado/EG1_NGS396_S8_L001_R1_001.fastq.gz_cut_R1.fastq,/media/ext5tb/anajulia/montagem2/fungo_germinado/EG2_NGS396_S8_L001_R1_001.fastq.gz_cut_R1.fastq,/media/ext5tb/anajulia/montagem2/fungo_germinado/EG3_NGS396_S8_L001_R1_001.fastq.gz_cut_R1.fastq \
+--right /media/ext5tb/anajulia/montagem2/fungo_germinado/EG1_NGS396_S8_L001_R1_001.fastq.gz_cut_R2.fastq,/media/ext5tb/anajulia/montagem2/fungo_germinado/EG2_NGS396_S8_L001_R1_001.fastq.gz_cut_R2.fastq,/media/ext5tb/anajulia/montagem2/fungo_germinado/EG3_NGS396_S8_L001_R1_001.fastq.gz_cut_R2.fastq \
+--max_memory 150G --CPU 40 --SS_lib_type RF \
+--output /media/ext5tb/anajulia/montagem2/fungo_germinado/trinity_montagem_germinado > trinity_germinado_run.log
+
 
 
 
