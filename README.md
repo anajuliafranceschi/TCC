@@ -193,9 +193,7 @@ sudo: gustavoc
 senha: genomics10,
 
 # TrinityStats
-################################
-        ## Counts of transcripts, etc.
-################################
+Counts of transcripts, etc.
 Total trinity 'genes':	74185
 Total trinity transcripts:	105628
 Percent GC: 44.67
@@ -215,10 +213,10 @@ Stats based on ALL transcript contigs:
 	Total assembled bases: 76372710
 
 # BUSCO Analysis
-        # BUSCO version is: 5.8.0 
-        # The lineage dataset is: basidiomycota_odb10 (Creation date: 2020-09-10, number of genomes: 133, number of BUSCOs: 1764)
-        # Summarized benchmarking in BUSCO notation for file /mnt/pulsar/files/staging/10326218/inputs/dataset_15dc61c8-4ee9-422d-9f9d-342227968d2e.dat
-        # BUSCO was run in mode: euk_tran
+BUSCO version is: 5.8.0 
+The lineage dataset is: basidiomycota_odb10 (Creation date: 2020-09-10, number of genomes: 133, number of BUSCOs: 1764)
+Summarized benchmarking in BUSCO notation for file /mnt/pulsar/files/staging/10326218/inputs/dataset_15dc61c8-4ee9-422d-9f9d-342227968d2e.dat
+BUSCO was run in mode: euk_tran
 
 	***** Results: *****
 
@@ -238,9 +236,8 @@ Stats based on ALL transcript contigs:
  # Using the CDHits to colapse the assembly
 cd-hit -i trinity_output_attempt5.Trinity.fasta -o montageminteracao_colapsed.fasta -T 20 -M 0 -c 0.9 -d 0
 
-################################
-	## Counts of transcripts, etc.
-################################
+TrinityStats
+Counts of transcripts, etc.
 Total trinity 'genes':	72600
 Total trinity transcripts:	83533
 Percent GC: 44.55
@@ -259,10 +256,10 @@ Stats based on ALL transcript contigs:
 	Average contig: 605.20
 	Total assembled bases: 50554586
 
-	 # BUSCO version is: 5.8.0 
-	# The lineage dataset is: basidiomycota_odb10 (Creation date: 2020-09-10, number of genomes: 133, number of BUSCOs: 1764)
-	# Summarized benchmarking in BUSCO notation for file /mnt/pulsar/files/staging/10361100/inputs/dataset_796b3a49-62e3-4763-b764-50ffe9ffb893.dat
-	# BUSCO was run in mode: euk_tran
+BUSCO version is: 5.8.0 
+The lineage dataset is: basidiomycota_odb10 (Creation date: 2020-09-10, number of genomes: 133, number of BUSCOs: 1764)
+Summarized benchmarking in BUSCO notation for file /mnt/pulsar/files/staging/10361100/inputs/dataset_796b3a49-62e3-4763-b764-50ffe9ffb893.dat
+BUSCO was run in mode: euk_tran
 
 	***** Results: *****
 
@@ -281,6 +278,54 @@ docker run --user $(id -u):$(id -g) -v /media/ext5tb/anajulia/montagem2/fungo_ge
 --right /media/ext5tb/anajulia/montagem2/fungo_germinado/EG1_NGS396_S8_L001_R1_001.fastq.gz_cut_R2.fastq,/media/ext5tb/anajulia/montagem2/fungo_germinado/EG2_NGS396_S8_L001_R1_001.fastq.gz_cut_R2.fastq,/media/ext5tb/anajulia/montagem2/fungo_germinado/EG3_NGS396_S8_L001_R1_001.fastq.gz_cut_R2.fastq \
 --max_memory 150G --CPU 40 --SS_lib_type RF \
 --output /media/ext5tb/anajulia/montagem2/fungo_germinado/trinity_montagem_germinado > trinity_germinado_run.log
+
+# Trinity Stats
+Counts of transcripts, etc.
+Total trinity 'genes':	33658
+Total trinity transcripts:	67520
+Percent GC: 43.97
+
+########################################
+Stats based on ALL transcript contigs:
+########################################
+
+	Contig N10: 4278
+	Contig N20: 3254
+	Contig N30: 2698
+	Contig N40: 2288
+	Contig N50: 1946
+
+	Median contig length: 784
+	Average contig: 1183.57
+	Total assembled bases: 79914310
+
+ # BUSCO
+BUSCO version is: 5.8.0 
+The lineage dataset is: basidiomycota_odb10 (Creation date: 2020-09-10, number of genomes: 133, number of BUSCOs: 1764)
+Summarized benchmarking in BUSCO notation for file /mnt/pulsar/files/staging/10379549/inputs/dataset_9f881ead-aa1b-4897-bce4-a97cf1361acc.dat
+BUSCO was run in mode: euk_tran
+
+	***** Results: *****
+
+	C:90.7%[S:3.6%,D:87.1%],F:2.8%,M:6.5%,n:1764	   
+	1600	Complete BUSCOs (C)			   
+	63	Complete and single-copy BUSCOs (S)	   
+	1537	Complete and duplicated BUSCOs (D)	   
+	50	Fragmented BUSCOs (F)			   
+	114	Missing BUSCOs (M)			   
+	1764	Total BUSCO groups searched
+ 
+
+# Mapping the transcriptomes
+
+
+
+
+
+
+
+
+ 
 
 
 
