@@ -231,7 +231,7 @@ BUSCO was run in mode: euk_tran
  # Assemblying with different kmers sizes (WRONG!!!)
  In order to obtain the best assembly, the assembly will be performed again, but this this time, using 2 different kmers sizes. The same code will be used, and only the parameter "--KMER_SIZE" will be add. After the assembly with Trinity, the CD-Hit tool will be used to collapse the two assemblies, removing redundancy and clustering similar sequences to generate a non-redundant dataset for downstream analyses.
 
-<span style="color:red"> Assembly 1: docker run --user $(id -u):$(id -g) -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity \
+Assembly 1: docker run --user $(id -u):$(id -g) -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity \
 --seqType fq --samples_file /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinitydata_interaction_2.txt \
 --max_memory 150G --CPU 40 --SS_lib_type RF --KMER_SIZE 25 --output /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinity_output_kmer25 > trinity_kmer25_run.log
 
@@ -239,7 +239,7 @@ Assembly 2: docker run --user $(id -u):$(id -g) -v $(pwd):$(pwd) trinityrnaseq/t
 --seqType fq --samples_file /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinitydata_interaction_2.txt \
 --max_memory 150G --CPU 40 --SS_lib_type RF --KMER_SIZE 31 --output /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinity_output_kmer31 > trinity_kmer31_run.log
 
-CD-Hits: cd-hit -i trinity_output_kmer25.Trinity.fasta -i2 trinity_output_kmer31.Trinity.fasta -o trinitykmer_colapsed.fasta -T 20 -M 0 -c 0.9 -d 0 </span>
+CD-Hits: cd-hit -i trinity_output_kmer25.Trinity.fasta -i2 trinity_output_kmer31.Trinity.fasta -o trinitykmer_colapsed.fasta -T 20 -M 0 -c 0.9 -d 0 
  
  # Finding ORFs in transcripts
  The script biopython_orf_find.py was used, and it found 246618 orfs in the assembly file (output: orfs_montageminteracao.fasta)
@@ -335,8 +335,15 @@ BUSCO was run in mode: euk_tran
  
 
 # Mapping the transcriptomes
+The blastn was used to map the two assemblies, in order to identify sequences there are only expressed during interaction with the plant. So, first of all, the blast databank was created using the spore germinated transcriptome, because this assembly will be the reference for the blastn.
 
+makeblastdb -in trinity_montagem_germinado.Trinity.fasta -dbtype nucl -out germinado_db
 
+After this, we ran the blastn, using the interaction transcriptome to compare with the databank created early.
+
+blastn -query montageminteracao_colapsed.fasta -db germinado_db -out germinado_vs_interacao.blastn -evalue 1e-05 -outfmt "6 std qcovs" -word_size 6 -num_threads 30
+
+Best Hits: 30 (identidade ) e 80 (cobertura) 
 
 
 
