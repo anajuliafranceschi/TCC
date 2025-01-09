@@ -235,11 +235,54 @@ Assembly 1: docker run --user $(id -u):$(id -g) -v $(pwd):$(pwd) trinityrnaseq/t
 --seqType fq --samples_file /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinitydata_interaction_2.txt \
 --max_memory 150G --CPU 40 --SS_lib_type RF --min_kmer_cov 25 --output /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinity_output_kmer25 > trinity_kmer25_run.log
 
+Total trinity 'genes':	10505
+Total trinity transcripts:	16502
+Percent GC: 45.62
+
+	Contig N10: 2117
+	Contig N20: 1727
+	Contig N30: 1449
+	Contig N40: 1213
+	Contig N50: 1028
+
+	Median contig length: 521
+	Average contig: 719.06
+	Total assembled bases: 11865985
+
+ C:38.0%[S:4.4%,D:33.6%],F:9.5%,M:52.5%,n:1764	   
+	670	Complete BUSCOs (C)			   
+	78	Complete and single-copy BUSCOs (S)	   
+	592	Complete and duplicated BUSCOs (D)	   
+	168	Fragmented BUSCOs (F)			   
+	926	Missing BUSCOs (M)			   
+	1764	Total BUSCO groups searched		   
+
+
 Assembly 2: docker run --user $(id -u):$(id -g) -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity \
 --seqType fq --samples_file /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinitydata_interaction_2.txt \
 --max_memory 150G --CPU 40 --SS_lib_type RF --min_kmer_cov 31 --output /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinity_output_kmer31 > trinity_kmer31_run.log
 
-CD-Hits: cd-hit -i trinity_output_kmer25.Trinity.fasta -i2 trinity_output_kmer31.Trinity.fasta -o trinitykmer_colapsed.fasta -T 20 -M 0 -c 0.9 -d 0 
+Total trinity 'genes':	8654
+Total trinity transcripts:	13785
+Percent GC: 45.79
+
+	Contig N10: 2069
+	Contig N20: 1654
+	Contig N30: 1393
+	Contig N40: 1173
+	Contig N50: 996
+
+	Median contig length: 521
+	Average contig: 708.11
+	Total assembled bases: 9761362
+
+ C:33.6%[S:3.5%,D:30.2%],F:8.3%,M:58.0%,n:1764	   
+	593	Complete BUSCOs (C)			   
+	61	Complete and single-copy BUSCOs (S)	   
+	532	Complete and duplicated BUSCOs (D)	   
+	147	Fragmented BUSCOs (F)			   
+	1024	Missing BUSCOs (M)			   
+	1764	Total BUSCO groups searched
  
  # Finding ORFs in transcripts
  The script biopython_orf_find.py was used, and it found 246618 orfs in the assembly file (output: orfs_montageminteracao.fasta)
