@@ -233,11 +233,11 @@ BUSCO was run in mode: euk_tran
 
 Assembly 1: docker run --user $(id -u):$(id -g) -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity \
 --seqType fq --samples_file /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinitydata_interaction_2.txt \
---max_memory 150G --CPU 40 --SS_lib_type RF --KMER_SIZE 25 --output /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinity_output_kmer25 > trinity_kmer25_run.log
+--max_memory 150G --CPU 40 --SS_lib_type RF --min_kmer_cov 25 --output /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinity_output_kmer25 > trinity_kmer25_run.log
 
 Assembly 2: docker run --user $(id -u):$(id -g) -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity \
 --seqType fq --samples_file /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinitydata_interaction_2.txt \
---max_memory 150G --CPU 40 --SS_lib_type RF --KMER_SIZE 31 --output /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinity_output_kmer31 > trinity_kmer31_run.log
+--max_memory 150G --CPU 40 --SS_lib_type RF --min_kmer_cov 31 --output /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/trinity_output_kmer31 > trinity_kmer31_run.log
 
 CD-Hits: cd-hit -i trinity_output_kmer25.Trinity.fasta -i2 trinity_output_kmer31.Trinity.fasta -o trinitykmer_colapsed.fasta -T 20 -M 0 -c 0.9 -d 0 
  
