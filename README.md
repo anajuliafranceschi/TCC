@@ -283,6 +283,13 @@ Percent GC: 45.79
 	147	Fragmented BUSCOs (F)			   
 	1024	Missing BUSCOs (M)			   
 	1764	Total BUSCO groups searched
+
+ Then we need to combine these two assemblies:
+ cat trinity_output_kmer25.Trinity.fasta trinity_output_kmer31.Trinity.fasta > combined_kmers_interaction.fasta
+
+ And then, we used the cd-hits-est to remove redundance in the sequences:
+ cd-hit-est -i combined_kmers_interaction.fasta -o collapsed_kmers_interaction.fasta -c 0.90 -n 8 -T 25 -M 100000
+
  
  # Finding ORFs in transcripts
  The script biopython_orf_find.py was used, and it found 246618 orfs in the assembly file (output: orfs_montageminteracao.fasta)
