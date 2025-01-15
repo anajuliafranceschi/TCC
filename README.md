@@ -395,7 +395,65 @@ blastn -query montageminteracao_colapsed.fasta -db germinado_db -out germinado_v
 
 Best Hits: 30 (identidade ) e 80 (cobertura) 
 
+The script below was used to select the best hits in the blast file: 
+	#!/usr/bin/python3
+	
+	# Parâmetros de corte
+	ident_cutoff = 30.0
+	qcov_cutoff = 80.0
+	
+	# Dicionário para armazenar os melhores hits
+	dic = {}
+	
+	# Leitura do arquivo de entrada
+	with open("germinado_vs_interacao.blastn") as inp:
+	    for line in inp:
+	        if line[0] != '#':  # Ignorar linhas de cabeçalho
+	            line = line.strip().split('\t')
+	            try:
+	                # line[2] = %ident, line[12] = %qcoverage
+	                if float(line[2]) >= ident_cutoff and float(line[12]) >= qcov_cutoff:
+	                    # Atualizar ou adicionar o melhor hit baseado no %ident
+	                    if line[0] not in dic or float(dic[line[0]][2]) < float(line[2]):
+	                        dic[line[0]] = line
+	            except (KeyError, IndexError, ValueError):
+	                continue
+	
+	# Escrita dos resultados no arquivo de saída
+	with open('./germinado_vs_interacao_best_hits.tsv', 'w') as out:
+	    # Cabeçalho do arquivo de saída
+	    out.write('query\tsubject\t%ident\talignment_length\tmismatches\tgap_opens\tqstart\tqend\tsstart\tsend\tevalue\tbit_score\t%qcoverage\n')
+	    for hit in dic.values():
+	        out.write('\t'.join(hit) + '\n')
 
+  After, a table file was done using the information in the best hits file, in order to register the corresponding IDs:
+ 	 #!/usr/bin/python3
+
+	# Arquivos de entrada e saída
+	input_file = "germinado_vs_interacao_best_hits.tsv"
+	output_file = "correspondencias_ids.tsv"
+	
+	# Abrir o arquivo de entrada e criar o de saída
+	with open(input_file) as inp, open(output_file, "w") as out:
+	    # Escrever o cabeçalho no arquivo de saída
+	    out.write("query_id subject_id\n")
+	
+	    # Ignorar o cabeçalho do arquivo de entrada
+	    next(inp)
+	
+	    # Processar cada linha do arquivo
+	    for line in inp:
+	        # Dividir a linha por qualquer espaço ou tabulação
+	        fields = line.strip().split()
+	
+	        if len(fields) >= 2:  # Garantir que há pelo menos duas colunas
+	            query_id = fields[0]
+	            subject_id = fields[1]
+	
+	            # Escrever os IDs no arquivo de saída separados por espaço
+	            out.write(f"{query_id} {subject_id}\n")
+
+And after that, another script was used to compare the IDs in the second columm in the file, that are refered to the IDs in the assembly, with the IDs that are actually in the assembly file. In this way, we could separate the IDs that weren't found in the table, the IDs related to transcripts that are only expressed during interactin with plant:
 
 
 
