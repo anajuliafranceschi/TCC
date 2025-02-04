@@ -456,6 +456,37 @@ The script below was used to select the best hits in the blast file:
 And after that, another script was used to compare the IDs in the second columm in the file, that are refered to the IDs in the assembly, with the IDs that are actually in the assembly file. In this way, we could separate the IDs that weren't found in the table, the IDs related to transcripts that are only expressed during interactin with plant:
 
 
+WRONG!!!!!!!!!!!!
+
+
+# Mapping the transcriptomes 2.0
+#!/bin/bash
+
+ref=/media/SSD1TB/pedro/MAT_quant/gentrome_MAT-2.fa.gz -> trancriptoma de referência (gzip)
+index=/media/SSD1TB/pedro/MAT_quant/salmon_index_MAT-2 -> indexa o transcriptoma
+
+# Index reference
+/media/SSD1TB/pedro/salmon-latest_linux_x86_64/bin/salmon index -t "$ref" -d decoys.txt (tirar) -p 20 -i "$index"
+
+# Quantify against reference
+for i in /media/ext2tb/pedro/rnaseq/invitro/04/cutadapt/*PE1.fastq.gz - colocar o caminho da pasta criada dentro da pasta "salmon" 
+do
+    file2=$(echo "$i" | sed "s/PE1/PE2/g")
+    rep=$(basename "$i" | sed -E "s/SSC04_([0-9]+)_NGS659.*/\1/g") - (mudar apenas essa parte - SSC04_([0-9]+)_NGS659, de acordo com a pasta específica)
+
+    echo "Analyzing $i and $file2 for replicate $rep"
+
+/media/SSD1TB/pedro/salmon-latest_linux_x86_64/bin/salmon quant -i "$index" \
+-l A -1 "$i" -2 "$file2" \
+--validateMappings \
+ --threads 10 \
+ --seqBias \
+ --gcBias \
+ --minAssignedFrags 1 \
+-o /media/SSD1TB/pedro/MAT_quant/SSC04_MAT-2_axenic_"$rep" - (mudar essa parte SSC04_MAT-2_axenic de acordo com a pasta específica)
+done
+
+
 
 
  
