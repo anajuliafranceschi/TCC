@@ -462,6 +462,9 @@ The files were renamed according to their specific treatments and time points, a
 The same was done to the files located in: /media/ext5tb/anajulia/montagem2/fungo_germinado
 Examples:  invitro_R1_PE1.fastq, invitro_R3_PE1.fastq, invitro_R2_PE2.fastq
 
+2 - A table file was organized in order to give the exact file locations for Trinity. The table model is specified in topic Trinity Assembly
+
+
 #!/bin/bash
 
 ref=/media/SSD1TB/pedro/MAT_quant/gentrome_MAT-2.fa.gz -> trancriptoma de referência (gzip)
