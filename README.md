@@ -464,6 +464,10 @@ Examples:  invitro_R1_PE1.fastq, invitro_R3_PE1.fastq, invitro_R2_PE2.fastq
 
 2 - A table file was organized in order to give the exact file locations for Trinity. The table model is specified in topic Trinity Assembly
 
+3 - The script to run Trinity was modified using the new files
+
+
+
 
 #!/bin/bash
 
