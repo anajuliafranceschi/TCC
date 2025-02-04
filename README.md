@@ -384,7 +384,7 @@ BUSCO was run in mode: euk_tran
 	1764	Total BUSCO groups searched
  
 
-# Mapping the transcriptomes
+# Mapping the transcriptomes using blast (WRONG!!!!)
 The blastn was used to map the two assemblies, in order to identify sequences there are only expressed during interaction with the plant. So, first of all, the blast databank was created using the spore germinated transcriptome, because this assembly will be the reference for the blastn.
 
 makeblastdb -in trinity_montagem_germinado.Trinity.fasta -dbtype nucl -out germinado_db
@@ -453,13 +453,15 @@ The script below was used to select the best hits in the blast file:
 	            # Escrever os IDs no arquivo de saída separados por espaço
 	            out.write(f"{query_id} {subject_id}\n")
 
-And after that, another script was used to compare the IDs in the second columm in the file, that are refered to the IDs in the assembly, with the IDs that are actually in the assembly file. In this way, we could separate the IDs that weren't found in the table, the IDs related to transcripts that are only expressed during interactin with plant:
 
+# Quantification using SALMON
 
-WRONG!!!!!!!!!!!!
+1- Changing the files names: /media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq
+The files were renamed according to their specific treatments and time points, as shown in the examples: inoc_0hpi_40_R1_PE1.fastq, inoc_0hpi_80_R1_PE2.fastq, inoc_7dpi_40_R1_PE1.fastq, inoc_15dpi_40_R2_PE2.fastq.
 
+The same was done to the files located in: /media/ext5tb/anajulia/montagem2/fungo_germinado
+Examples:  invitro_R1_PE1.fastq, invitro_R3_PE1.fastq, invitro_R2_PE2.fastq
 
-# Mapping the transcriptomes 2.0
 #!/bin/bash
 
 ref=/media/SSD1TB/pedro/MAT_quant/gentrome_MAT-2.fa.gz -> trancriptoma de referência (gzip)
