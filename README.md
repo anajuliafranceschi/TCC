@@ -464,8 +464,27 @@ Examples:  invitro_R1_PE1.fastq, invitro_R3_PE1.fastq, invitro_R2_PE2.fastq
 
 2 - A table file was organized in order to give the exact file locations for Trinity. The table model is specified in topic Trinity Assembly
 
-3 - The script to run Trinity was modified using the new files
+3 - The script to run Trinity was modified using the new files:
+docker run --user $(id -u):$(id -g) -v $(pwd):$(pwd) trinityrnaseq/trinityrnaseq Trinity \
+--seqType fq --samples_file /media/ext5tb/anajulia/montagem2/salmon/transcript_ref/invitro_vs_inoc_data.txt \
+--max_memory 150G --CPU 40 --SS_lib_type RF --output /media/ext5tb/anajulia/montagem2/salmon/transcript_ref/trinity_ref_invitro_inoc > trinity_invitro_inoc_run.log
 
+4 - Trinity Stats results
+Total trinity 'genes':	90836
+Total trinity transcripts:	138217
+Percent GC: 44.29
+
+	Contig N10: 3771
+	Contig N20: 2772
+	Contig N30: 2222
+	Contig N40: 1823
+	Contig N50: 1445
+
+	Median contig length: 420
+	Average contig: 805.38
+	Total assembled bases: 111316687
+
+5 - BUSCO Results 
 
 
 
