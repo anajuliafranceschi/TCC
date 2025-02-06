@@ -485,22 +485,31 @@ Percent GC: 44.29
 	Total assembled bases: 111316687
 
 5 - BUSCO Results 
+C:91.5%[S:4.1%,D:87.4%],F:3.1%,M:5.4%,n:1764	   
+	1614	Complete BUSCOs (C)			   
+	73	Complete and single-copy BUSCOs (S)	   
+	1541	Complete and duplicated BUSCOs (D)	   
+	54	Fragmented BUSCOs (F)			   
+	96	Missing BUSCOs (M)			   
+	1764	Total BUSCO groups searched
 
+ 6 - Collapsing with CD-Hits
+ Done in Galaxy 
 
-
+7 - Run Salmon
 #!/bin/bash
 
-ref=/media/SSD1TB/pedro/MAT_quant/gentrome_MAT-2.fa.gz -> trancriptoma de referência (gzip)
-index=/media/SSD1TB/pedro/MAT_quant/salmon_index_MAT-2 -> indexa o transcriptoma
+ref=/media/ext5tb/anajulia/montagem2/salmon/transcript_ref/trinity_ref_invitro_inoc.Trinity.fasta.gz 
+index=/media/ext5tb/anajulia/montagem2/salmon/transcript_ref/salmon_index_invitro_inoc 
 
 # Index reference
-/media/SSD1TB/pedro/salmon-latest_linux_x86_64/bin/salmon index -t "$ref" -d decoys.txt (tirar) -p 20 -i "$index"
+/media/SSD1TB/pedro/salmon-latest_linux_x86_64/bin/salmon index -t "$ref" -p 20 -i "$index"
 
 # Quantify against reference
-for i in /media/ext2tb/pedro/rnaseq/invitro/04/cutadapt/*PE1.fastq.gz - colocar o caminho da pasta criada dentro da pasta "salmon" 
+for i in /media/ext5tb/anajulia/montagem2/salmon/invitro/*PE1.fastq 
 do
     file2=$(echo "$i" | sed "s/PE1/PE2/g")
-    rep=$(basename "$i" | sed -E "s/SSC04_([0-9]+)_NGS659.*/\1/g") - (mudar apenas essa parte - SSC04_([0-9]+)_NGS659, de acordo com a pasta específica)
+    rep=$(basename "$i" | sed -E "s/invitro_R([0-9]+)_.*/\1/g") 
 
     echo "Analyzing $i and $file2 for replicate $rep"
 
@@ -511,14 +520,14 @@ do
  --seqBias \
  --gcBias \
  --minAssignedFrags 1 \
--o /media/SSD1TB/pedro/MAT_quant/SSC04_MAT-2_axenic_"$rep" - (mudar essa parte SSC04_MAT-2_axenic de acordo com a pasta específica)
+-o /media/ext5tb/anajulia/montagem2/salmon/invitro/count_invitro_"$rep" 
 done
 
 
+![image](https://github.com/user-attachments/assets/ff5fbab9-8d06-4dcd-a19d-a3bb4b374857)
 
 
  
-
 
 
 
