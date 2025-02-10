@@ -494,37 +494,45 @@ C:91.5%[S:4.1%,D:87.4%],F:3.1%,M:5.4%,n:1764
 	1764	Total BUSCO groups searched
 
  6 - Collapsing with CD-Hits
- Done in Galaxy 
+ Done in Galaxy. Results were not significant, so we chose to use the transcriptome done without CD-Hits.
 
 7 - Run Salmon
-#!/bin/bash
+	#!/bin/bash
+	
+	ref=/media/ext5tb/anajulia/montagem2/salmon/transcript_ref/trinity_ref_invitro_inoc.Trinity.fasta.gz 
+	index=/media/ext5tb/anajulia/montagem2/salmon/transcript_ref/salmon_index_invitro_inoc 
+	
+	# Index reference
+	/media/SSD1TB/pedro/salmon-latest_linux_x86_64/bin/salmon index -t "$ref" -p 20 -i "$index"
+	
+	# Quantify against reference
+	for i in /media/ext5tb/anajulia/montagem2/salmon/invitro/*PE1.fastq 
+	do
+	    file2=$(echo "$i" | sed "s/PE1/PE2/g")
+	    rep=$(basename "$i" | sed -E "s/invitro_R([0-9]+)_.*/\1/g") 
+	
+	    echo "Analyzing $i and $file2 for replicate $rep"
+	
+	/media/SSD1TB/pedro/salmon-latest_linux_x86_64/bin/salmon quant -i "$index" \
+	-l A -1 "$i" -2 "$file2" \
+	--validateMappings \
+	 --threads 10 \
+	 --seqBias \
+	 --gcBias \
+	 --minAssignedFrags 1 \
+	-o /media/ext5tb/anajulia/montagem2/salmon/invitro/count_invitro_"$rep" 
+	done
 
-ref=/media/ext5tb/anajulia/montagem2/salmon/transcript_ref/trinity_ref_invitro_inoc.Trinity.fasta.gz 
-index=/media/ext5tb/anajulia/montagem2/salmon/transcript_ref/salmon_index_invitro_inoc 
+8 - Merging files
+R scripts were used to merge the quant files given by Salmon, ir order to organize the multiple files in only one main file. In this way, it will be possible do identify the transcripts counts in each os the treatments. 
 
-# Index reference
-/media/SSD1TB/pedro/salmon-latest_linux_x86_64/bin/salmon index -t "$ref" -p 20 -i "$index"
+9 - Filter the transcripts that are expressed only in plant, not in in vitro condition. For this step, we used two R scripts with two differente filter conditions.
+The first one, we separated the transcripts with 0 counts in in vitro condition and at least 1 positive one treatment must have a count ≥ 1 in every replicate (Script filter_inplanta_expressed_soft).
 
-# Quantify against reference
-for i in /media/ext5tb/anajulia/montagem2/salmon/invitro/*PE1.fastq 
-do
-    file2=$(echo "$i" | sed "s/PE1/PE2/g")
-    rep=$(basename "$i" | sed -E "s/invitro_R([0-9]+)_.*/\1/g") 
+The second one, the transcript must have a count of 0 in all replicates and must have a positive count (≥ 1) in ALL replicates (Script filter_inplanta_expressed_hard)
 
-    echo "Analyzing $i and $file2 for replicate $rep"
+# Finding Effector Candidates
 
-/media/SSD1TB/pedro/salmon-latest_linux_x86_64/bin/salmon quant -i "$index" \
--l A -1 "$i" -2 "$file2" \
---validateMappings \
- --threads 10 \
- --seqBias \
- --gcBias \
- --minAssignedFrags 1 \
--o /media/ext5tb/anajulia/montagem2/salmon/invitro/count_invitro_"$rep" 
-done
-
-
-![image](https://github.com/user-attachments/assets/ff5fbab9-8d06-4dcd-a19d-a3bb4b374857)
 
 
  
