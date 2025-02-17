@@ -531,6 +531,12 @@ The first one, we separated the transcripts with 0 counts in in vitro condition 
 
 The second one, the transcript must have a count of 0 in all replicates and must have a positive count (≥ 1) in ALL replicates (Script filter_inplanta_expressed_hard)
 
+# We discovered that there were still plant sequences in our files, which were interfering with the analyses of the fungal transcripts. Therefore, we had to adopt a different strategy. The sequencing reads, which had already been mapped against the grapevine genome (*Vitis labrusca* - var. Concord), were analyzed using Kraken2 with a plant database. Thus, the reads that showed no similarity to the database, meaning the unclassified reads, were selected again. The processes followed the same steps as described in the previous section.
+
+Kraken2 - conda activate kraken2
+kraken2_db - plant library and taxonomy
+Krona - kraken2 reports combined 
+
 # Finding Effector Candidates
 
 
