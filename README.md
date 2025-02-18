@@ -531,27 +531,127 @@ The first one, we separated the transcripts with 0 counts in in vitro condition 
 
 The second one, the transcript must have a count of 0 in all replicates and must have a positive count (≥ 1) in ALL replicates (Script filter_inplanta_expressed_hard)
 
-# We discovered that there were still plant sequences in our files, which were interfering with the analyses of the fungal transcripts. Therefore, we had to adopt a different strategy. The sequencing reads, which had already been mapped against the grapevine genome (*Vitis labrusca* - var. Concord), were analyzed using Kraken2 with a plant database. Thus, the reads that showed no similarity to the database, meaning the unclassified reads, were selected again. The processes followed the same steps as described in the previous section.
+# We discovered that there were still plant sequences in our files, which were interfering with the analyses of the fungal transcripts. Therefore, we had to adopt a different strategy. The sequencing reads, which had already been mapped against the grapevines genomes (*Vitis labrusca* - var. Concord and *Vitis vinifera*), were analyzed using Kraken2 with a plant database. Thus, the reads that showed no similarity to the database, meaning the unclassified reads, were selected again. The processes followed the same steps as described in the previous section.
+
+# Mapping with Vitis vinifera genome using HISAT2
+	#!/bin/bash
+	
+	# Caminhos para o genoma de referência e o índice HISAT2
+	ref=/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq/ncbi_vinifera/ncbi_dataset/data/GCF_030704535.1/GCF_030704535.1_ASM3070453v1_genomic.fna
+	index=/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq/hisat2_index
+	
+	# Construir o índice do genoma de referência (descomente a linha abaixo se ainda não tiver o índice)
+	# hisat2-build "$ref" "$index"
+	
+	# Caminho para as leituras (substitua conforme necessário)
+	reads_dir=/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq
+	
+	# Alinhar leituras contra o genoma de referência
+	for i in "$reads_dir"/*_PE1.fastq
+	do
+	    # Substituir _PE1 por _PE2 para os arquivos paired-end
+	    file2=$(echo "$i" | sed "s/_PE1/_PE2/g")
+	
+	    # Extrair nome do arquivo base
+	    sample_name=$(basename "$i" | sed "s/_PE1.fastq//")
+	
+	    echo "Analisando amostra: $sample_name"
+	
+	    # Executar o HISAT2
+	    hisat2 -p 25 --rg-id "$sample_name" --rg SM:"$sample_name" \
+	    --summary-file ./summary_"$sample_name"_mapped.txt \
+	    -x "$index" -1 "$i" -2 "$file2" \
+	    -S ./"$sample_name"_mapped.sam
+	
+	    # Converter SAM para BAM, ordenar e indexar
+	    samtools sort ./"$sample_name"_mapped.sam -o ./"$sample_name"_mapped.bam
+	    samtools index ./"$sample_name"_mapped.bam
+	
+	    # Remover o arquivo SAM para economizar espaço
+	    rm ./"$sample_name"_mapped.sam
+	
+	done
+
+# Filter bam files
+	#!/bin/bash
+
+	# Definir diretórios
+	bam_dir="/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq"
+	output_dir="$bam_dir/unmapped_bam"
+	
+	# Criar diretório de saída se não existir
+	mkdir -p "$output_dir"
+	
+	# Processar cada arquivo BAM no diretório
+	for bam in "$bam_dir"/*.bam
+	do
+	    # Extrair nome base do arquivo (sem caminho e extensão)
+	    sample_name=$(basename "$bam" ".bam")
+	
+	    echo "Extraindo leituras não mapeadas de $sample_name"
+	
+	    # Extrair apenas as leituras não mapeadas (flag 4 = paired-end unmapped)
+	    samtools view --threads 10 -b -f 4 "$bam" > "$output_dir"/"${sample_name}_unmapped.bam"
+	
+	    echo "$sample_name extraído com sucesso."
+	done
+	
+	echo "Extração concluída."
+
+ # Convert bam files to fastq files
+ #!/bin/bash
+
+	# Definir diretórios
+	bam_dir="/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq/unmapped_bam"
+	output_dir="/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq/extracted_fastq"
+	
+	# Criar diretório de saída se não existir
+	mkdir -p "$output_dir"
+	
+	# Processar cada arquivo BAM não mapeado no diretório
+	for bam in "$bam_dir"/*_unmapped.bam
+	do
+	    # Extrair nome base do arquivo (sem caminho e extensão)
+	    sample_name=$(basename "$bam" "_unmapped.bam")
+	
+	    echo "Convertendo $sample_name para FASTQ"
+	
+	    # Converter BAM para FASTQ, separando R1 e R2
+	    samtools fastq -@ 10 "$bam" \
+	        -1 "$output_dir"/"${sample_name}_PE1.fastq" \
+	        -2 "$output_dir"/"${sample_name}_PE2.fastq" \
+	        -0 /dev/null -s /dev/null -n
+	
+	    # Remover arquivo intermediário BAM
+	    rm "$bam"
+	
+	    echo "$sample_name convertido com sucesso."
+	done
+	
+	echo "Conversão concluída."
+
+
+
 
 Kraken2 - conda activate kraken2
 kraken2_db - plant library and taxonomy
 Krona - kraken2 reports combined 
 
 kraken2 script
-#!/bin/bash
+	#!/bin/bash
 
-# Caminhos para os arquivos de leitura e banco de dados
-input_dir="/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq"
-db_path="/media/ext5tb/anajulia/kraken2/kraken2_db"
-output_dir="/media/ext5tb/anajulia/montagem2/kraken2_output_filtered"
-
-# Criar diretório de saída se não existir
-mkdir -p $output_dir
-
-# Loop sobre os arquivos _PE1 e _PE2 (paired-end)
-for file1 in $input_dir/*_PE1.fastq; do
-    # Encontra o arquivo correspondente _PE2
-    file2="${file1/_PE1/_PE2}"
+	# Caminhos para os arquivos de leitura e banco de dados
+	input_dir="/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq/extracted_fastq"
+	db_path="/media/ext5tb/anajulia/kraken2/kraken2_db"
+	output_dir="/media/ext5tb/anajulia/montagem2/kraken2_output_filtered"
+	
+	# Criar diretório de saída se não existir
+	mkdir -p $output_dir
+	
+	# Loop sobre os arquivos _PE1 e _PE2 (paired-end)
+	for file1 in $input_dir/*_PE1.fastq; do
+	    # Encontra o arquivo correspondente _PE2
+	    file2="${file1/_PE1/_PE2}"
 
     # Pega o nome base dos arquivos para nomear a saída
     base_name=$(basename "$file1" | sed 's/_PE1.*//')
