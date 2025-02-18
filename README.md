@@ -537,6 +537,44 @@ Kraken2 - conda activate kraken2
 kraken2_db - plant library and taxonomy
 Krona - kraken2 reports combined 
 
+kraken2 script
+#!/bin/bash
+
+# Caminhos para os arquivos de leitura e banco de dados
+input_dir="/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq"
+db_path="/media/ext5tb/anajulia/kraken2/kraken2_db"
+output_dir="/media/ext5tb/anajulia/montagem2/kraken2_output_filtered"
+
+# Criar diretório de saída se não existir
+mkdir -p $output_dir
+
+# Loop sobre os arquivos _PE1 e _PE2 (paired-end)
+for file1 in $input_dir/*_PE1.fastq; do
+    # Encontra o arquivo correspondente _PE2
+    file2="${file1/_PE1/_PE2}"
+
+    # Pega o nome base dos arquivos para nomear a saída
+    base_name=$(basename "$file1" | sed 's/_PE1.*//')
+
+    # Comando Kraken2
+    kraken2 --db $db_path \
+            --paired \
+            --threads 8 \
+            --report $output_dir/"$base_name"_kraken2_report.txt \
+            --output $output_dir/"$base_name"_kraken2_output.txt \
+            --classified-out $output_dir/"$base_name"_classified_#.fastq \
+            --unclassified-out $output_dir/"$base_name"_unclassified_#.fastq \
+            $file1 $file2
+
+    # Converte classified reads de FASTQ para FASTA (se necessário)
+    for suffix in classified unclassified; do
+        for end in 1 2; do
+            awk 'NR%4==1 {printf(">%s\n", substr($0,2));} NR%4==2 {print;}' $output_dir/"$base_name"_"$suffix"_$end.fastq > $output_dir/"$base_name"_"$suffix"_$end.fasta
+        done
+    done
+done
+
+
 # Finding Effector Candidates
 
 
