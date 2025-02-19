@@ -637,7 +637,7 @@ Kraken2 - conda activate kraken2
 kraken2_db - plant library and taxonomy
 Krona - kraken2 reports combined 
 
-kraken2 script
+# kraken2 script
 	#!/bin/bash
 
 	# Caminhos para os arquivos de leitura e banco de dados
@@ -659,21 +659,99 @@ kraken2 script
     # Comando Kraken2
     kraken2 --db $db_path \
             --paired \
-            --threads 8 \
+            --threads 30 \
             --report $output_dir/"$base_name"_kraken2_report.txt \
             --output $output_dir/"$base_name"_kraken2_output.txt \
             --classified-out $output_dir/"$base_name"_classified_#.fastq \
             --unclassified-out $output_dir/"$base_name"_unclassified_#.fastq \
             $file1 $file2
-
-    # Converte classified reads de FASTQ para FASTA (se necessário)
-    for suffix in classified unclassified; do
-        for end in 1 2; do
-            awk 'NR%4==1 {printf(">%s\n", substr($0,2));} NR%4==2 {print;}' $output_dir/"$base_name"_"$suffix"_$end.fastq > $output_dir/"$base_name"_"$suffix"_$end.fasta
-        done
-    done
 done
 
+# Convert kraken fastq output to fasta
+	#!/bin/bash
+	
+	# Definir diretórios
+	kraken_output_dir="/media/ext5tb/anajulia/montagem2/kraken2_output_filtered"
+	output_fasta_dir="$kraken_output_dir/kraken_fasta"
+	
+	# Criar diretório de saída se não existir
+	mkdir -p "$output_fasta_dir"
+	
+	# Processar arquivos "unclassified" e converter para FASTA
+	for end in 1 2; do
+	    # Encontrar os arquivos unclassified com os sufixos ajustados
+	    for fastq_file in "$kraken_output_dir"/*_unclassified__"$end".fastq; do
+	        # Extrair o nome base do arquivo (sem caminho e extensão)
+	        base_name=$(basename "$fastq_file" "_unclassified__"$end".fastq")
+	        
+	        echo "Convertendo $base_name"
+	
+	        # Converter FASTQ para FASTA
+	        awk 'NR%4==1 {printf(">%s\n", substr($0,2));} NR%4==2 {print;}' "$fastq_file" > "$output_fasta_dir"/"${base_name}_$end.fasta"
+	
+	        echo "$base_name convertido com sucesso para FASTA."
+	    done
+	done
+	
+	echo "Conversão para FASTA concluída."
+
+# Renaming files 1
+	#!/bin/bash
+	
+	# Definir diretório onde os arquivos fasta estão localizados
+	fasta_dir="/media/ext5tb/anajulia/montagem2/kraken2_output_filtered/kraken_fasta"  # Ajuste o caminho conforme necessário
+	
+	# Processar todos os arquivos fasta no diretório
+	for fasta_file in "$fasta_dir"/*_mapped_*.fasta; do
+	    # Extrair o nome base sem o caminho
+	    base_name=$(basename "$fasta_file")
+	    
+	    # Novo nome removendo o termo "mapped"
+	    new_name=$(echo "$base_name" | sed 's/_mapped//g')
+	    
+	    # Renomear o arquivo
+	    mv "$fasta_file" "$fasta_dir/$new_name"
+	    
+	    echo "Arquivo renomeado: $base_name -> $new_name"
+	done
+	
+	echo "Renomeação concluída."
+
+# Renaming files 2
+	#!/bin/bash
+	
+	# Definir diretório onde os arquivos fasta estão localizados
+	fasta_dir="/media/ext5tb/anajulia/montagem2/kraken2_output_filtered/kraken_fasta"  # Ajuste o caminho conforme necessário
+	
+	# Processar todos os arquivos fasta no diretório
+	for fasta_file in "$fasta_dir"/*_1.fasta "$fasta_dir"/*_2.fasta; do
+	    # Extrair o nome base sem o caminho
+	    base_name=$(basename "$fasta_file")
+	    
+	    # Novo nome substituindo "1" por "PE1" e "2" por "PE2"
+	    if [[ "$base_name" =~ _1\.fasta$ ]]; then
+	        new_name=$(echo "$base_name" | sed 's/_1.fasta$/_PE1.fasta/')
+	    elif [[ "$base_name" =~ _2\.fasta$ ]]; then
+	        new_name=$(echo "$base_name" | sed 's/_2.fasta$/_PE2.fasta/')
+	    fi
+	    
+	    # Renomear o arquivo
+	    mv "$fasta_file" "$fasta_dir/$new_name"
+	    
+	    echo "Arquivo renomeado: $base_name -> $new_name"
+	done
+	
+	echo "Renomeação concluída."
+
+# Run Trinity 
+	docker run --user $(id -u):$(id -g) -v /media/ext5tb/anajulia:/media/ext5tb/anajulia trinityrnaseq/trinityrnaseq Trinity \
+--seqType fa --samples_file /media/ext5tb/anajulia/montagem2/salmon/transcript_ref/invitro_vs_inoc_data.txt \
+--max_memory 150G --CPU 40 --SS_lib_type RF --output /media/ext5tb/anajulia/montagem2/salmon/transcript_ref/trinity_ref_invitro_inoc > trinity_invitro_inoc_run.log
+
+
+
+
+    
 
 # Finding Effector Candidates
 
