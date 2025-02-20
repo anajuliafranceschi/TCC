@@ -749,19 +749,19 @@ done
 --max_memory 150G --CPU 40 --SS_lib_type RF --output /media/ext5tb/anajulia/montagem2/salmon/transcript_ref/trinity_ref_invitro_inoc > trinity_invitro_inoc_run.log
 
 # Trinity Stats
-Total trinity 'genes':	90836
-Total trinity transcripts:	138217
-Percent GC: 44.29
+Total trinity 'genes':	60828
+Total trinity transcripts:	97982
+Percent GC: 44.41
 
-	Contig N10: 3771
-	Contig N20: 2772
-	Contig N30: 2222
-	Contig N40: 1823
-	Contig N50: 1445
+	Contig N10: 3919
+	Contig N20: 2996
+	Contig N30: 2462
+	Contig N40: 2055
+	Contig N50: 1693
 
-	Median contig length: 420
-	Average contig: 805.38
-	Total assembled bases: 111316687
+	Median contig length: 463
+	Average contig: 916.27
+	Total assembled bases: 89777711
 
 # BUSCO
 C:90.4%[S:5.1%,D:85.3%],F:3.3%,M:6.3%,n:1764	   
@@ -772,7 +772,6 @@ C:90.4%[S:5.1%,D:85.3%],F:3.3%,M:6.3%,n:1764
 	111	Missing BUSCOs (M)			   
 	1764	Total BUSCO groups searched
 
-    
 
 # Finding Effector Candidates
 
