@@ -533,244 +533,90 @@ The second one, the transcript must have a count of 0 in all replicates and must
 
 # We discovered that there were still plant sequences in our files, which were interfering with the analyses of the fungal transcripts. Therefore, we had to adopt a different strategy. The sequencing reads, which had already been mapped against the grapevines genomes (*Vitis labrusca* - var. Concord and *Vitis vinifera*), were analyzed using Kraken2 with a plant database. Thus, the reads that showed no similarity to the database, meaning the unclassified reads, were selected again. The processes followed the same steps as described in the previous section.
 
-# Mapping with Vitis vinifera genome using HISAT2
-	#!/bin/bash
-	
-	# Caminhos para o genoma de referência e o índice HISAT2
-	ref=/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq/ncbi_vinifera/ncbi_dataset/data/GCF_030704535.1/GCF_030704535.1_ASM3070453v1_genomic.fna
-	index=/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq/hisat2_index
-	
-	# Construir o índice do genoma de referência (descomente a linha abaixo se ainda não tiver o índice)
-	# hisat2-build "$ref" "$index"
-	
-	# Caminho para as leituras (substitua conforme necessário)
-	reads_dir=/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq
-	
-	# Alinhar leituras contra o genoma de referência
-	for i in "$reads_dir"/*_PE1.fastq
-	do
-	    # Substituir _PE1 por _PE2 para os arquivos paired-end
-	    file2=$(echo "$i" | sed "s/_PE1/_PE2/g")
-	
-	    # Extrair nome do arquivo base
-	    sample_name=$(basename "$i" | sed "s/_PE1.fastq//")
-	
-	    echo "Analisando amostra: $sample_name"
-	
-	    # Executar o HISAT2
-	    hisat2 -p 25 --rg-id "$sample_name" --rg SM:"$sample_name" \
-	    --summary-file ./summary_"$sample_name"_mapped.txt \
-	    -x "$index" -1 "$i" -2 "$file2" \
-	    -S ./"$sample_name"_mapped.sam
-	
-	    # Converter SAM para BAM, ordenar e indexar
-	    samtools sort ./"$sample_name"_mapped.sam -o ./"$sample_name"_mapped.bam
-	    samtools index ./"$sample_name"_mapped.bam
-	
-	    # Remover o arquivo SAM para economizar espaço
-	    rm ./"$sample_name"_mapped.sam
-	
-	done
-
-# Filter bam files
-	#!/bin/bash
-
-	# Definir diretórios
-	bam_dir="/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq"
-	output_dir="$bam_dir/unmapped_bam"
-	
-	# Criar diretório de saída se não existir
-	mkdir -p "$output_dir"
-	
-	# Processar cada arquivo BAM no diretório
-	for bam in "$bam_dir"/*.bam
-	do
-	    # Extrair nome base do arquivo (sem caminho e extensão)
-	    sample_name=$(basename "$bam" ".bam")
-	
-	    echo "Extraindo leituras não mapeadas de $sample_name"
-	
-	    # Extrair apenas as leituras não mapeadas (flag 4 = paired-end unmapped)
-	    samtools view --threads 10 -b -f 4 "$bam" > "$output_dir"/"${sample_name}_unmapped.bam"
-	
-	    echo "$sample_name extraído com sucesso."
-	done
-	
-	echo "Extração concluída."
-
- # Convert bam files to fastq files
- #!/bin/bash
-
-	# Definir diretórios
-	bam_dir="/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq/unmapped_bam"
-	output_dir="/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq/extracted_fastq"
-	
-	# Criar diretório de saída se não existir
-	mkdir -p "$output_dir"
-	
-	# Processar cada arquivo BAM não mapeado no diretório
-	for bam in "$bam_dir"/*_unmapped.bam
-	do
-	    # Extrair nome base do arquivo (sem caminho e extensão)
-	    sample_name=$(basename "$bam" "_unmapped.bam")
-	
-	    echo "Convertendo $sample_name para FASTQ"
-	
-	    # Converter BAM para FASTQ, separando R1 e R2
-	    samtools fastq -@ 10 "$bam" \
-	        -1 "$output_dir"/"${sample_name}_PE1.fastq" \
-	        -2 "$output_dir"/"${sample_name}_PE2.fastq" \
-	        -0 /dev/null -s /dev/null -n
-	
-	    # Remover arquivo intermediário BAM
-	    rm "$bam"
-	
-	    echo "$sample_name convertido com sucesso."
-	done
-	
-	echo "Conversão concluída."
-
-
-
-
 Kraken2 - conda activate kraken2
 kraken2_db - plant library and taxonomy
 Krona - kraken2 reports combined 
 
 # kraken2 script
-	#!/bin/bash
-
-	# Caminhos para os arquivos de leitura e banco de dados
-	input_dir="/media/ext5tb/anajulia/montagem2/fungi_reads/fungi_cut_fastq/unmapped_fastq/extracted_fastq"
-	db_path="/media/ext5tb/anajulia/kraken2/kraken2_db"
-	output_dir="/media/ext5tb/anajulia/montagem2/kraken2_output_filtered"
+		#!/bin/bash
 	
-	# Criar diretório de saída se não existir
-	mkdir -p $output_dir
+	work_dir="/media/ext5tb/anajulia/montagem2/fungi_reads/unmapped_fastq/unmapped2_fastq/unmapped3_fastq"
+	database_dir="/media/ext5tb/anajulia/kraken2/kraken2_db"
 	
-	# Loop sobre os arquivos _PE1 e _PE2 (paired-end)
-	for file1 in $input_dir/*_PE1.fastq; do
-	    # Encontra o arquivo correspondente _PE2
-	    file2="${file1/_PE1/_PE2}"
-
-    # Pega o nome base dos arquivos para nomear a saída
-    base_name=$(basename "$file1" | sed 's/_PE1.*//')
-
-    # Comando Kraken2
-    kraken2 --db $db_path \
-            --paired \
-            --threads 30 \
-            --report $output_dir/"$base_name"_kraken2_report.txt \
-            --output $output_dir/"$base_name"_kraken2_output.txt \
-            --classified-out $output_dir/"$base_name"_classified_#.fastq \
-            --unclassified-out $output_dir/"$base_name"_unclassified_#.fastq \
-            $file1 $file2
-done
+	cd "$work_dir"
+	
+	mkdir -p kraken_output
+	mkdir -p kraken_output/classified
+	mkdir -p kraken_output/unclassified
+	
+	for input in *_PE1.fastq; do
+	    input2="${input/_PE1.fastq/_PE2.fastq}"
+	    output1="${input%_PE1.fastq}"
+	
+	    kraken2 --use-names --threads 40 \
+	    --db "$database_dir" \
+	    --report ./kraken_output/"${output1}_report.txt" \
+	    --paired "$input" "$input2" \
+	    --classified-out ./kraken_output/classified/"${output1}_contamination#.fastq" \
+	    --unclassified-out ./kraken_output/unclassified/"${output1}_filtered#.fastq" \
+	    > ./kraken_output/"${output1}_kraken.txt"
+	
+	    gzip ./kraken_output/classified/"${output1}_contamination"*.fastq
+	    gzip ./kraken_output/unclassified/"${output1}_filtered"*.fastq
+	
+	done
 
 # Convert kraken fastq output to fasta
+	
 	#!/bin/bash
 	
-	# Definir diretórios
-	kraken_output_dir="/media/ext5tb/anajulia/montagem2/kraken2_output_filtered"
-	output_fasta_dir="$kraken_output_dir/kraken_fasta"
+	# Definir o diretório de entrada (onde estão os arquivos .fastq)
+	INPUT_DIR="./"
 	
-	# Criar diretório de saída se não existir
-	mkdir -p "$output_fasta_dir"
+	# Criar um diretório de saída para os arquivos convertidos
+	OUTPUT_DIR="${INPUT_DIR}/fasta_convertido"
+	mkdir -p "$OUTPUT_DIR"
 	
-	# Processar arquivos "unclassified" e converter para FASTA
-	for end in 1 2; do
-	    # Encontrar os arquivos unclassified com os sufixos ajustados
-	    for fastq_file in "$kraken_output_dir"/*_unclassified__"$end".fastq; do
-	        # Extrair o nome base do arquivo (sem caminho e extensão)
-	        base_name=$(basename "$fastq_file" "_unclassified__"$end".fastq")
-	        
-	        echo "Convertendo $base_name"
+	# Processar todos os arquivos FASTQ na pasta
+	for file in "$INPUT_DIR"/*.fastq; do
+	    output_file="$OUTPUT_DIR/$(basename "$file" .fastq).fasta"
+	    echo "Convertendo: $file -> $output_file"
 	
-	        # Converter FASTQ para FASTA
-	        awk 'NR%4==1 {printf(">%s\n", substr($0,2));} NR%4==2 {print;}' "$fastq_file" > "$output_fasta_dir"/"${base_name}_$end.fasta"
-	
-	        echo "$base_name convertido com sucesso para FASTA."
-	    done
+	    # Converte FASTQ para FASTA: mantém apenas as linhas de identificação e sequência
+	    awk 'NR%4==1 {print ">" substr($0, 2); next} NR%4==2 {print}' "$file" > "$output_file"
 	done
 	
-	echo "Conversão para FASTA concluída."
-
-# Renaming files 1
-	#!/bin/bash
-	
-	# Definir diretório onde os arquivos fasta estão localizados
-	fasta_dir="/media/ext5tb/anajulia/montagem2/kraken2_output_filtered/kraken_fasta"  # Ajuste o caminho conforme necessário
-	
-	# Processar todos os arquivos fasta no diretório
-	for fasta_file in "$fasta_dir"/*_mapped_*.fasta; do
-	    # Extrair o nome base sem o caminho
-	    base_name=$(basename "$fasta_file")
-	    
-	    # Novo nome removendo o termo "mapped"
-	    new_name=$(echo "$base_name" | sed 's/_mapped//g')
-	    
-	    # Renomear o arquivo
-	    mv "$fasta_file" "$fasta_dir/$new_name"
-	    
-	    echo "Arquivo renomeado: $base_name -> $new_name"
-	done
-	
-	echo "Renomeação concluída."
-
-# Renaming files 2
-	#!/bin/bash
-	
-	# Definir diretório onde os arquivos fasta estão localizados
-	fasta_dir="/media/ext5tb/anajulia/montagem2/kraken2_output_filtered/kraken_fasta"  # Ajuste o caminho conforme necessário
-	
-	# Processar todos os arquivos fasta no diretório
-	for fasta_file in "$fasta_dir"/*_1.fasta "$fasta_dir"/*_2.fasta; do
-	    # Extrair o nome base sem o caminho
-	    base_name=$(basename "$fasta_file")
-	    
-	    # Novo nome substituindo "1" por "PE1" e "2" por "PE2"
-	    if [[ "$base_name" =~ _1\.fasta$ ]]; then
-	        new_name=$(echo "$base_name" | sed 's/_1.fasta$/_PE1.fasta/')
-	    elif [[ "$base_name" =~ _2\.fasta$ ]]; then
-	        new_name=$(echo "$base_name" | sed 's/_2.fasta$/_PE2.fasta/')
-	    fi
-	    
-	    # Renomear o arquivo
-	    mv "$fasta_file" "$fasta_dir/$new_name"
-	    
-	    echo "Arquivo renomeado: $base_name -> $new_name"
-	done
-	
-	echo "Renomeação concluída."
+	echo "Conversão concluída! Arquivos salvos em: $OUTPUT_DIR"
 
 # Run Trinity 
 	docker run --user $(id -u):$(id -g) -v /media/ext5tb/anajulia:/media/ext5tb/anajulia trinityrnaseq/trinityrnaseq Trinity \
---seqType fa --samples_file /media/ext5tb/anajulia/montagem2/salmon/transcript_ref/invitro_vs_inoc_data.txt \
---max_memory 150G --CPU 40 --SS_lib_type RF --output /media/ext5tb/anajulia/montagem2/salmon/transcript_ref/trinity_ref_invitro_inoc > trinity_invitro_inoc_run.log
+--seqType fa --samples_file /media/ext5tb/anajulia/montagem2/quant_salmon/transcriptome_ref/trinity_invitro_inoc_data2.txt \
+--max_memory 150G --CPU 40 --SS_lib_type RF --output /media/ext5tb/anajulia/montagem2/quant_salmon/transcriptome_ref/trinity_invitro_inoc2 > trinity_invitro_inoc2_run.log
 
 # Trinity Stats
-Total trinity 'genes':	60828
-Total trinity transcripts:	97982
-Percent GC: 44.41
+	Total trinity 'genes':	59677
+	Total trinity transcripts:	96859
+	Percent GC: 44.44
 
-	Contig N10: 3919
+	Contig N10: 3898
 	Contig N20: 2996
-	Contig N30: 2462
-	Contig N40: 2055
-	Contig N50: 1693
+	Contig N30: 2468
+	Contig N40: 2064
+	Contig N50: 1704
 
-	Median contig length: 463
-	Average contig: 916.27
-	Total assembled bases: 89777711
+	Median contig length: 468
+	Average contig: 922.27
+	Total assembled bases: 89330621
+
 
 # BUSCO
-C:90.4%[S:5.1%,D:85.3%],F:3.3%,M:6.3%,n:1764	   
-	1594	Complete BUSCOs (C)			   
-	90	Complete and single-copy BUSCOs (S)	   
-	1504	Complete and duplicated BUSCOs (D)	   
-	59	Fragmented BUSCOs (F)			   
-	111	Missing BUSCOs (M)			   
-	1764	Total BUSCO groups searched
+	C:90.3%[S:4.9%,D:85.4%],F:3.3%,M:6.4%,n:1764	   
+		1593	Complete BUSCOs (C)			   
+		87	Complete and single-copy BUSCOs (S)	   
+		1506	Complete and duplicated BUSCOs (D)	   
+		58	Fragmented BUSCOs (F)			   
+		113	Missing BUSCOs (M)			   
+		1764	Total BUSCO groups searched
 
 
 # Finding Effector Candidates
