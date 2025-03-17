@@ -620,7 +620,13 @@ Krona - kraken2 reports combined
 
 
 # Finding Effector Candidates
+## Finding ORFs in the transcriptome
+The scripts biopython_orf_find.py and get_longestORF.py were used. 91751 orfs were found in the transcriptome file
 
+## SignalP (https://www.nature.com/articles/s41587-021-01156-3) - 2022
+signalp6 --fastafile /media/ext5tb/anajulia/montagem2/quant_salmon/transcriptome_ref/orfs/longestorfs_invitro_inoc2.fasta --organism other --output_dir /media/ext5tb/anajulia/montagem2/quant_salmon/transcriptome_ref/orfs --format txt --mode fast 
+
+ 
 
 
  
