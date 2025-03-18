@@ -626,6 +626,15 @@ The scripts biopython_orf_find.py and get_longestORF.py were used. 91751 orfs we
 ## SignalP (https://www.nature.com/articles/s41587-021-01156-3) - 2022
 signalp6 --fastafile /media/ext5tb/anajulia/montagem2/quant_salmon/transcriptome_ref/orfs/longestorfs_invitro_inoc2.fasta --organism other --output_dir /media/ext5tb/anajulia/montagem2/quant_salmon/transcriptome_ref/orfs --format txt --mode fast 
 
+3573 sequences had their signal peptide identified
+
+## TMHMM 
+Online - TMHMM 2.0 - https://services.healthtech.dtu.dk/services/TMHMM-2.0/
+
+2615 sequences didn't have the transmembrane domine and were selected
+
+
+
  
 
 
