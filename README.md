@@ -639,6 +639,7 @@ Online - NetGPI 1.1 - https://services.healthtech.dtu.dk/services/NetGPI-1.1/
 2454 sequences didn't have GPI-anchoring and were selected
 
 ## BLAST 
+Banco de Dados usado: NCBI NR 03 set 2023
 
 
  
