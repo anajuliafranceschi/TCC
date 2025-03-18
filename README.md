@@ -634,7 +634,11 @@ Online - TMHMM 2.0 - https://services.healthtech.dtu.dk/services/TMHMM-2.0/
 2595 sequences didn't have the transmembrane domine and were selected
 
 ## NetGPI
+Online - NetGPI 1.1 - https://services.healthtech.dtu.dk/services/NetGPI-1.1/
 
+2454 sequences didn't have GPI-anchoring and were selected
+
+## BLAST 
 
 
  
