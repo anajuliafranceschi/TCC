@@ -631,7 +631,9 @@ signalp6 --fastafile /media/ext5tb/anajulia/montagem2/quant_salmon/transcriptome
 ## TMHMM 
 Online - TMHMM 2.0 - https://services.healthtech.dtu.dk/services/TMHMM-2.0/
 
-2615 sequences didn't have the transmembrane domine and were selected
+2595 sequences didn't have the transmembrane domine and were selected
+
+## NetGPI
 
 
 
