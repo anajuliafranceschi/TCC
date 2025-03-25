@@ -641,6 +641,19 @@ Online - NetGPI 1.1 - https://services.healthtech.dtu.dk/services/NetGPI-1.1/
 ## BLAST 
 Banco de Dados usado: NCBI NR 03 set 2023
 
+## EffectorP
+Online - EffectorP 3.0 - https://effectorp.csiro.au/
+
+1502 predicted effectors
+Predicted cytoplasmic effectors: 921 (37.5%)
+Predicted apoplastic effectors: 581 (23.7%)
+
+14.7%% of the cytoplasmic effectors are predicted dual-localized (cytoplasmic/apoplastic).
+34.9%% of the apoplastic effectors are predicted dual-localized (apoplastic/cytoplasmic).
+
+## Venny
+
+
 
  
 
