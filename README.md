@@ -652,6 +652,16 @@ Predicted apoplastic effectors: 581 (23.7%)
 34.9%% of the apoplastic effectors are predicted dual-localized (apoplastic/cytoplasmic).
 
 ## Venny
+The IDs of the sequences classified by EffectorP were submitted to Venny 2.0, along with the IDs of the sequences present in the filtered Salmon table. This table was generated using the following filter: only transcripts with 0 counts in vitro and 1 or more counts in all replicates of at least one in planta condition were selected. The IDs were compared to determine which effector candidates were expressed in planta under the established conditions. A total of 130 sequences were selected.
+(https://bioinfogp.cnb.csic.es/tools/venny/index2.0.2.html) 
+
+## Heatmap
+A heatmap was done in Galaxy using the 130 sequences selected in the step above.
+
+## blastp
+At the same time, I was doing a blastp in Galaxy with the secretome sequences (2454 sequences - didn't have gpi), in order to verify if there were any plant sequences between them. A R script was applied to select only the best hits in the blast output, considering the conditions of identity = 30, coverage = 80, and the lowest e-value. If the first two criteria were not met by a group of transcripts with the same ID, the one with the lowest e-value was selected to ensure at least one hit per transcript in the final table. A total of 1,228 hits were selected, and it was verified that there were exactly 1,228 unique IDs in the BLAST output table. Therefore, 1,226 sequences had no matches in BLAST.
+
+
 
 
 
