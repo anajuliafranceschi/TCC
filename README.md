@@ -661,6 +661,10 @@ A heatmap was done in Galaxy using the 130 sequences selected in the step above.
 ## blastp
 At the same time, I was doing a blastp in Galaxy with the secretome sequences (2454 sequences - didn't have gpi), in order to verify if there were any plant sequences between them. A R script was applied to select only the best hits in the blast output, considering the conditions of identity = 30, coverage = 80, and the lowest e-value. If the first two criteria were not met by a group of transcripts with the same ID, the one with the lowest e-value was selected to ensure at least one hit per transcript in the final table. A total of 1,228 hits were selected, and it was verified that there were exactly 1,228 unique IDs in the BLAST output table. Therefore, 1,226 sequences had no matches in BLAST.
 
+## blastp best hits X effetorome
+A comparison was made between the table containing the sequences predicted as effectors that met the in planta expression criteria and the BLAST best hits table to verify which sequences already had an ortholog or functional description. Of the 130 sequences selected as expressed candidates, 40 matched other fungal sequences from the NCBI database, including both basidiomycete and non-basidiomycete fungi. Among these 40, only 16 corresponded to orthologs of rust-causing fungi.
+
+
 
 
 
