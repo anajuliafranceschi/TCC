@@ -664,6 +664,13 @@ At the same time, I was doing a blastp in Galaxy with the secretome sequences (2
 ## blastp best hits X effetorome
 A comparison was made between the table containing the sequences predicted as effectors that met the in planta expression criteria and the BLAST best hits table to verify which sequences already had an ortholog or functional description. Of the 130 sequences selected as expressed candidates, 40 matched other fungal sequences from the NCBI database, including both basidiomycete and non-basidiomycete fungi. Among these 40, only 16 corresponded to orthologs of rust-causing fungi.
 
+## interpro
+The 16 sequences that corresponded to orthologs of rust-causing fungi were submited to interpro. The results can be consulted in: https://www.ebi.ac.uk/interpro/result/InterProScan/iprscan5-R20250401-184806-0378-36469245-p1m/#table
+
+![image](https://github.com/user-attachments/assets/2375d57b-8aa3-4d77-9eb8-bb9b6f89d58a)
+
+
+
 
 
 
